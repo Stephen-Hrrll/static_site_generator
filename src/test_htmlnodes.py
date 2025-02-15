@@ -2,29 +2,53 @@ import unittest
 from htmlnode import HTMLNode
 
 class TestHTMLNode(unittest.TestCase):
-    def test_initialization(self):
-        node = HTMLNode(tag="p", value="Hello", children=None, props={"class": "text"})
-        self.assertEqual(node.tag, "p")
-        self.assertEqual(node.value, "Hello")
-        self.assertEqual(node.children, [])
-        self.assertEqual(node.props, {"class": "text"})
+    def test_to_html_props(self):
+        node = HTMLNode(
+            "div",
+            "Hello, world!",
+            None,
+            {"class": "greeting", "href": "https://boot.dev"},
+        )
+        self.assertEqual(
+            node.props_to_html(),
+            ' class="greeting" href="https://boot.dev"',
+        )
 
-        # Test default values
-        node_default = HTMLNode()
-        self.assertIsNone(node_default.tag)
-        self.assertIsNone(node_default.value)
-        self.assertEqual(node_default.children, [])
-        self.assertEqual(node_default.props, {})
+    def test_values(self):
+        node = HTMLNode(
+            "div",
+            "I wish I could read",
+        )
+        self.assertEqual(
+            node.tag,
+            "div",
+        )
+        self.assertEqual(
+            node.value,
+            "I wish I could read",
+        )
+        self.assertEqual(
+            node.children,
+            None,
+        )
+        self.assertEqual(
+            node.props,
+            None,
+        )
 
     def test_repr(self):
-        node = HTMLNode(tag="a", value="Click here", children=[], props={"href": "https://example.com"})
-        expected_repr = "tag=a value=Click here children=None props={'href': 'https://example.com'}"
-        self.assertEqual(repr(node), expected_repr)
+        node = HTMLNode(
+            "p",
+            "What a strange world",
+            None,
+            {"class": "primary"},
+        )
+        self.assertEqual(
+            node.__repr__(),
+            "HTMLNode(p, What a strange world, children: None, {'class': 'primary'})",
+        )
 
-    def test_props_to_html(self):
-        node = HTMLNode(tag="div", value="Test", props={"id": "main", "class": "container"})
-        expected_props_html = "tag=div value=Test children=None props={'id': 'main', 'class': 'container'}"
-        self.assertEqual(node.props_to_html(), expected_props_html)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
+
