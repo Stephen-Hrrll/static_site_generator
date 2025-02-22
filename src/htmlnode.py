@@ -26,9 +26,10 @@ class HTMLNode:
 class LeafNode(HTMLNode):
     def __init__(self, tag, value, props=None):
         super().__init__(value=value,tag=tag, props=props, children=None)
-        self.tag = tag #A string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
-        self.value = value #A string representing the value of the HTML tag (e.g. the text inside a paragraph)
-        self.props = props #A dictionary of key-value pairs representing the attributes of the HTML tag. For example, a link (<a> tag) might have {"href": "https://www.google.com"}
+        # self.tag = tag #A string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
+        # self.value = value #A string representing the value of the HTML tag (e.g. the text inside a paragraph)
+        # self.props = props #A dictionary of key-value pairs repr
+        # esenting the attributes of the HTML tag. For example, a link (<a> tag) might have {"href": "https://www.google.com"}
 
 
     def to_html(self):
@@ -43,3 +44,18 @@ class LeafNode(HTMLNode):
 #end class LeafNode
 
 
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag=tag, value=None, children=children, props=props)
+
+    def to_html(self):
+        if self.tag == None:
+            raise ValueError("missing tag in ParentNode object")
+        if self.children == None:
+            raise ValueError("missing value in ParentNode object")
+        children_html = ""
+        for child in self.children:
+            children_html += child.to_html()
+        
+        return f'<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>'
+       
